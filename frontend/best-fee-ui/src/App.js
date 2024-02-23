@@ -8,7 +8,7 @@ function App() {
     <div className="container">
       <h1>Best fee Pool Statistics For Today</h1>
       <Statistics />
-      <h2>Last 7 days Bitcoin Transaction data</h2>
+      <h2>Last 7 days Bitcoin Transaction Fee data</h2>
       <div className="chart-container">
         <LineChart />
       </div>

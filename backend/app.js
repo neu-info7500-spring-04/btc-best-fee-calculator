@@ -20,7 +20,7 @@ function getDatesFromTodayToSevenDaysAgo() {
 }
   
 let dateRange = getDatesFromTodayToSevenDaysAgo();
-console.log(dateRange);
+// console.log(dateRange);
 
 let currentDate = new Date();
 let year = currentDate.getUTCFullYear();
@@ -33,7 +33,7 @@ day = day < 10 ? '0' + day : day;
 let formattedDate = year + '-' + month + '-' + day;
   
 
-console.log(formattedDate)
+// console.log(formattedDate)
 
 const BITQUERY_URL = 'https://graphql.bitquery.io';
 
