@@ -1,19 +1,39 @@
 import express from 'express';
 import fetch from 'node-fetch';
+import cors from "cors";
 const app = express();
 const port = 8080;
 
+app.use(cors());
+
 app.use(express.json());
 
+function getDatesFromTodayToSevenDaysAgo() {
+    let dates = [];
+    let today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      let date = new Date(today);
+      date.setDate(today.getDate() - i);
+      dates.push(date.toISOString().split('T')[0]);
+    }
+    return dates;
+}
+  
+let dateRange = getDatesFromTodayToSevenDaysAgo();
+console.log(dateRange);
+
 let currentDate = new Date();
-let year = currentDate.getFullYear();
-let month = currentDate.getMonth() + 1;
-let day = currentDate.getDate();
+let year = currentDate.getUTCFullYear();
+let month = currentDate.getUTCMonth() + 1;
+let day = currentDate.getUTCDate();
 
 month = month < 10 ? '0' + month : month;
 day = day < 10 ? '0' + day : day;
 
 let formattedDate = year + '-' + month + '-' + day;
+  
+
+console.log(formattedDate)
 
 const BITQUERY_URL = 'https://graphql.bitquery.io';
 
@@ -52,7 +72,6 @@ async function fetchBitcoinTransactions() {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // Provide your API key for Bitquery here
       'X-API-KEY': 'BQY56A4nyIVdODgl925qSr5pPFAj98TE',
     },
     body: JSON.stringify(query),
@@ -66,7 +85,7 @@ async function fetchBitcoinTransactions() {
 
   const transactions = responseData.data.bitcoin.transactions;
 
-  console.log(transactions)
+//   console.log(transactions)
 
   let totalSize = 0;
 
@@ -96,7 +115,7 @@ async function fetchBitcoinInputs() {
         {
             bitcoin(network: bitcoin) {
               transactions(options: {asc: "date.date"}, 
-                date: {is: "${formattedDate}"}) {
+                date: {since: "${dateRange[0]}"}) {
                 date: date {
                   date(format: "%Y-%m-%d")
                 }
@@ -105,7 +124,7 @@ async function fetchBitcoinInputs() {
                 avgFee: feeValue(calculate: average)
               }
               inputs(options: {asc: "date.date"}, 
-                date: {is: "${formattedDate}"}) {
+                date: {since: "${dateRange[0]}"}) {
                 date: date {
                   date(format: "%Y-%m-%d")
                 }
@@ -120,7 +139,6 @@ async function fetchBitcoinInputs() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          // Provide your API key for Bitquery here
           'X-API-KEY': 'BQY56A4nyIVdODgl925qSr5pPFAj98TE',
         },
         body: JSON.stringify(query),
@@ -130,7 +148,15 @@ async function fetchBitcoinInputs() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      return response.json();
+      const responseData = await response.json();
+
+    //   const transactions = responseData.data.bitcoin.transactions;
+
+    //   const inputs = responseData.data.bitcoin.inputs;
+
+      return responseData.data.bitcoin;
+
+    //   return { total_fee_value:  transactions[0].feeValue, avg_fee_value: transactions[0].avgFee, total_input_count: transactions[0].inputCount, total_input_value: inputs[0].value};
 }
 
 

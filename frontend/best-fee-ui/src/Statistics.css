@@ -1,0 +1,25 @@
+.statistics-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    background: #f7f7f7;
+    border-radius: 8px;
+    max-width: 300px;
+    margin: auto;
+  }
+  
+  .statistics-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .statistics-item strong {
+    margin-right: 5px;
+  }
+  

@@ -2,13 +2,29 @@ import React, { useEffect } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
+const response1 = await fetch('http://localhost:8080/bitcoin/inputs');
+
+const data1 = await response1.json();
+
+console.log(data1.transactions)
+
+const avgFee = []
+
+const totalFee = []
+
+for(let i = 0; i < data1.transactions.length; i ++)
+{
+  avgFee.push(data1.transactions[i].avgFee)
+  totalFee.push(data1.transactions[i].feeValue)
+}
+
+console.log(avgFee);
+
 const LineChart = () => {
-  // Sample data for the chart
+  
   const data = [
-    { name: 'Tokyo', data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2] },
-    { name: 'New York', data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8] },
-    { name: 'Berlin', data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6] },
-    { name: 'London', data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0] }
+    { name: 'Total Transaction Fee', data: totalFee },
+    { name: 'Average Fee', data: avgFee },
   ];
 
   useEffect(() => {
@@ -20,17 +36,31 @@ const LineChart = () => {
     // });
   }, []);
 
+  function getDatesFromTodayToSevenDaysAgo() {
+    let dates = [];
+    let today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      let date = new Date(today);
+      date.setDate(today.getDate() - i);
+      dates.push(date.toISOString().split('T')[0]);
+    }
+    return dates;
+  }
+  
+  let dateRange = getDatesFromTodayToSevenDaysAgo();
+  console.log(dateRange);
+
   // Highcharts configuration options
   const options = {
     title: {
-      text: 'Monthly Average Temperature'
+      text: 'Daily Fee Amount'
     },
     xAxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul']
+      categories: dateRange
     },
     yAxis: {
       title: {
-        text: 'Temperature (°C)'
+        text: 'Transaction Fee (BTC)'
       }
     },
     series: data
