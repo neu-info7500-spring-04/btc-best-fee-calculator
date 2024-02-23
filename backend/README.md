@@ -20,6 +20,6 @@ Returns 200 OK with the Transaction data as output.
 GET /bitcoin/inputs
 ```
 ``
-Returns 200 OK
+Returns 200 OK with Transaction and Transaction Inputs data as output.
 ``
 ##

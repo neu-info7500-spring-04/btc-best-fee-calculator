@@ -19,3 +19,7 @@ Webapp also depicts a Graph depicting the last 7 days Total Transaction fee and 
 
 In order to run the application, the Backend node server should be started first and then the Frontend React server (if in developer mode).
 Instructions to run the servers can be found in the backend and frontend folders.
+
+Developer - Nagendra babu Shakamuri <br>
+NUID - 002771584 </br>
+Email - shakamuri.n@northeastern.edu
